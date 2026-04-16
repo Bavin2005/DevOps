@@ -1,0 +1,59 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: mini-portal-mongodb
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - portal-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mini-portal-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/mini_enterprise_portal
+      - JWT_SECRET=${JWT_SECRET:-jwt_secret_key_123}
+      - COMPANY_EMAIL_DOMAIN=${COMPANY_EMAIL_DOMAIN:-company.com}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - PORT=5000
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - portal-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        # For local docker-compose: backend is reachable at localhost:5000 from the browser
+        - VITE_API_URL=http://localhost:5000
+    container_name: mini-portal-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - portal-network
+
+volumes:
+  mongo_data:
+
+networks:
+  portal-network:
+    driver: bridge

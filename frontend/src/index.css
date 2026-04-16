@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply antialiased text-slate-900 dark:text-slate-100 dark:bg-slate-950;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply rounded-lg bg-primary-600 px-4 py-2.5 font-medium text-white
+           transition-all duration-200 ease-out hover:bg-primary-700
+           focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+           active:scale-[0.98] dark:focus:ring-offset-slate-900;
+  }
+  .btn-secondary {
+    @apply rounded-lg border border-slate-200 bg-white px-4 py-2.5 font-medium text-slate-700
+           transition-all duration-200 ease-out hover:bg-slate-50 hover:border-slate-300
+           focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:ring-offset-2
+           active:scale-[0.98] dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200
+           dark:hover:bg-slate-700 dark:focus:ring-offset-slate-950;
+  }
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white shadow-sm
+           transition-all duration-300 ease-out hover:shadow-md
+           dark:border-slate-700 dark:bg-slate-800/50;
+  }
+  .input-base {
+    @apply w-full rounded-lg border border-slate-200 px-3 py-2.5 text-slate-900
+           placeholder-slate-400 transition-colors
+           focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20
+           dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100
+           dark:placeholder-slate-500 dark:focus:border-primary-500;
+  }
+}
+
+/* Skeleton loader */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+.dark .animate-shimmer {
+  background: linear-gradient(90deg, #334155 25%, #475569 50%, #334155 75%);
+  background-size: 200% 100%;
+}
