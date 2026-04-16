@@ -39,9 +39,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      args:
-        # Azure VM public IP — frontend calls this from the user's browser
-        - VITE_API_URL=http://20.219.111.205:5000
     container_name: mini-portal-frontend
     restart: unless-stopped
     ports:

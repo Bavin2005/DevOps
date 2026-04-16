@@ -12,21 +12,10 @@
 
 set -e
 
-VM_IP="${1}"
-
-if [ -z "$VM_IP" ]; then
-  echo "Error: Azure VM IP is required."
-  echo "Usage: ./scripts/deploy.sh <azure-vm-public-ip>"
-  exit 1
-fi
-
-VITE_API_URL="http://${VM_IP}:30500"
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "=============================="
 echo " Deploying Mini Portal"
-echo " VM IP: $VM_IP"
-echo " API URL: $VITE_API_URL"
 echo "=============================="
 
 cd "$PROJECT_DIR"
@@ -40,7 +29,6 @@ docker build \
   ./backend
 
 docker build \
-  --build-arg VITE_API_URL="$VITE_API_URL" \
   -t mini-portal-frontend:latest \
   ./frontend
 

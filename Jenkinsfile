@@ -16,7 +16,6 @@ pipeline {
     environment {
         IMAGE_BACKEND  = "mini-portal-backend"
         IMAGE_FRONTEND = "mini-portal-frontend"
-        VITE_API_URL   = "http://${params.AZURE_VM_IP}:30500"
         DEPLOY_BRANCH  = "main"
     }
 
@@ -62,7 +61,6 @@ pipeline {
             steps {
                 sh """
                     docker build \
-                      --build-arg VITE_API_URL=${VITE_API_URL} \
                       -t ${IMAGE_FRONTEND}:latest \
                       -t ${IMAGE_FRONTEND}:${BUILD_NUMBER} \
                       ./frontend

@@ -9,11 +9,8 @@ RUN npm ci
 
 COPY . .
 
-# VITE_API_URL is baked in at build time
-# Pass as: docker build --build-arg VITE_API_URL=http://<azure-vm-ip>:30500
-ARG VITE_API_URL=http://localhost:30500
-ENV VITE_API_URL=$VITE_API_URL
-
+# Vite uses relative URLs (/api/...) — no base URL needed at build time.
+# Nginx handles proxying /api/* to the backend container at runtime.
 RUN npm run build
 
 # Stage 2: Serve with Nginx
