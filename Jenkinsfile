@@ -17,7 +17,7 @@ pipeline {
         IMAGE_BACKEND  = "mini-portal-backend"
         IMAGE_FRONTEND = "mini-portal-frontend"
         VITE_API_URL   = "http://${params.AZURE_VM_IP}:30500"
-        DEPLOY_BRANCH  = "development"
+        DEPLOY_BRANCH  = "main"
     }
 
     stages {
