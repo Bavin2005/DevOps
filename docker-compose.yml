@@ -42,7 +42,7 @@ services:
     container_name: mini-portal-frontend
     restart: unless-stopped
     ports:
-      - "3000:4000"
+      - "80:4000"
     depends_on:
       - backend
     networks:
