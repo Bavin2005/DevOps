@@ -10,7 +10,7 @@ pipeline {
 
     parameters {
         // Set your Azure VM public IP here once — Jenkins saves it for future builds
-        string(name: 'AZURE_VM_IP', defaultValue: '0.0.0.0', description: 'Azure VM public IP address')
+        string(name: 'AZURE_VM_IP', defaultValue: '20.219.111.205', description: 'Azure VM public IP address')
     }
 
     environment {
