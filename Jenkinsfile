@@ -18,6 +18,7 @@ pipeline {
         IMAGE_BACKEND  = "mini-portal-backend"
         IMAGE_FRONTEND = "mini-portal-frontend"
         DEPLOY_BRANCH  = "main"
+        KUBECONFIG     = "/etc/rancher/k3s/k3s.yaml"
     }
 
     stages {
@@ -91,6 +92,15 @@ pipeline {
                 sh 'sudo kubectl apply -f k8s/hpa.yaml'
             }
         }
+
+        stage('Restart Deployments') {
+            steps {
+                sh 'sudo kubectl rollout restart deployment/backend  -n mini-portal'
+                sh 'sudo kubectl rollout restart deployment/frontend -n mini-portal'
+                sh 'sudo kubectl rollout restart deployment/mongodb  -n mini-portal'
+            }
+        }
+
 
         stage('Wait for Rollout') {
             steps {

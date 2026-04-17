@@ -51,4 +51,3 @@ spec:
   ports:
     - port: 27017
       targetPort: 27017
-  clusterIP: None  # Headless service — only reachable inside the cluster
