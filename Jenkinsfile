@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     triggers {
-        // Automatically triggered when GitHub sends a webhook push event.
-        // Requires: Jenkins → Manage Jenkins → Plugins → "GitHub" plugin installed.
+        // Triggered only when a PR is merged into main.
+        // GitHub sends a push event to main when a PR is merged — this catches that.
         // Requires: GitHub repo → Settings → Webhooks → http://<vm-ip>:8080/github-webhook/
+        // Requires: Jenkins → Manage Jenkins → Plugins → "GitHub" plugin installed.
         githubPush()
     }
 
@@ -32,16 +33,17 @@ pipeline {
         }
 
         stage('Branch Check') {
-            // Only deploy when pushing to the development branch.
-            // Pushes to other branches skip the build entirely.
+            // Only deploy when the push is to main (i.e. a PR was merged).
+            // Any push to feature/dev/hotfix branches is ignored — pipeline aborts early.
             steps {
                 script {
-                    if (!env.GIT_BRANCH.endsWith(env.DEPLOY_BRANCH)) {
-                        echo "Branch '${GIT_BRANCH}' is not '${DEPLOY_BRANCH}' — skipping deploy."
-                        currentBuild.result = 'NOT_BUILT'
-                        return
+                    def branch = env.GIT_BRANCH ?: ''
+                    if (!branch.endsWith(env.DEPLOY_BRANCH)) {
+                        echo "Push is to '${branch}', not '${env.DEPLOY_BRANCH}' — skipping deploy."
+                        currentBuild.result = 'ABORTED'
+                        error("Not a main branch push. Stopping pipeline.")
                     }
-                    echo "Branch check passed. Proceeding with deployment."
+                    echo "PR merged to main. Proceeding with deployment."
                 }
             }
         }
