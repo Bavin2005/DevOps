@@ -8,7 +8,7 @@ const router = express.Router();
 
 function isValidCompanyEmail(email) {
   if (!email || typeof email !== "string") return false;
-  const domain = COMPANY_EMAIL_DOMAIN.toLowerCase().replace(/^@/, "");
+  const domain = COMPANY_EMAIL_DOMAIN.toLowerCase().replace(/^@/, "").trim();
   const emailLower = email.toLowerCase().trim();
   return emailLower.endsWith(`@${domain}`);
 }
